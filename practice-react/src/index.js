@@ -2,13 +2,35 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-/* 
-Parent of [Square]
- */
-
 class Board extends React.Component {
+  /* 
+Parent of [Square]
+*/
+  constructor(props) {
+    super(props);
+    this.state = {
+      squares: Array(9).fill(null),
+      xIsNext: true,
+    };
+  }
   renderSquare(i) {
-    return <Square value={i} />;
+    return (
+      <Square
+        value={this.state.squares[i]}
+        onClick={() => {
+          this.handleClick(i);
+        }}
+      />
+    );
+  }
+
+  handleClick(i) {
+    const squares = this.state.squares.slice();
+    squares[i] = this.state.xIsNext ? "X" : "O";
+    this.setState({
+      squares: squares,
+      xIsNext: !this.state.xIsNext,
+    });
   }
 
   render() {
@@ -112,26 +134,20 @@ class Game extends React.Component {
   }
 }
 
-/* 
-Son of Board
- */
-
 class Square extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
+  /* 
+Son of Board
+*/
+
   render() {
     return (
       <button
         className="square"
         onClick={() => {
-          this.setState({ value: "X" });
+          this.props.onClick();
         }}
       >
-        {this.state.value}
+        {this.props.value}
       </button>
     );
   }
